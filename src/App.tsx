@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Search from "./components/Search";
 import Spinner from "./components/Spinner";
+import MovieCard from "./components/MovieCard";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -40,7 +41,7 @@ function App() {
       console.error("Error fetching movies:", error);
       setErrorMessage("Error fetching movies. Please try again later.");
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   };
 
@@ -71,9 +72,7 @@ function App() {
           ) : (
             <ul>
               {moviesList.map((movie) => (
-                <p className="text-white" key={movie.id}>
-                  {movie.title}
-                </p>
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </ul>
           )}
