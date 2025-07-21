@@ -1,4 +1,5 @@
 import { Client, Databases, ID, Query } from "appwrite";
+import { data } from "react-router-dom";
 
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -34,5 +35,17 @@ export const updateSearchCount = async (searchTerm, movie) => {
     }
   } catch (error) {
     console.error("Error updating search count:", error);
+  }
+};
+
+export const getTrendingMovies = async () => {
+  try {
+    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+      Query.orderDesc("count"),
+      Query.limit(5),
+    ]);
+    return result.documents;
+  } catch (error) {
+    console.error("Error fetching trending movies:", error);
   }
 };
