@@ -22,7 +22,10 @@ function App() {
   const [moviesList, setMoviesList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
   const [trendingMovies, setTrendingMovies] = useState([]);
+  const [isLoadingTrending, setIsLoadingTrending] = useState(false);
+  const [errorTrending, setErrorTrending] = useState("");
 
   useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
 
@@ -58,10 +61,16 @@ function App() {
 
   const loadTrendingMovies = async () => {
     try {
+      setIsLoadingTrending(true);
       const movies = await getTrendingMovies();
       setTrendingMovies(movies);
     } catch (error) {
       console.error("Error fetching trending movies:", error);
+      setErrorTrending(
+        "Error fetching trending movies. Please try again later."
+      );
+    } finally {
+      setIsLoadingTrending(false);
     }
   };
   useEffect(() => {
@@ -84,7 +93,13 @@ function App() {
           </h1>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
-        {trendingMovies.length > 0 && (
+        {isLoadingTrending ? (
+          <div className="flex justify-center items-center ">
+            <Spinner />
+          </div>
+        ) : errorTrending ? (
+          <p className="text-red-500">{errorTrending}</p>
+        ) : (
           <section className="trending">
             <h2>Trending Movies</h2>
             <ul>
