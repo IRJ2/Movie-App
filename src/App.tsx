@@ -4,6 +4,7 @@ import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
 import { useDebounce } from "react-use";
 import { getTrendingMovies, updateSearchCount } from "./appwrite";
+import type { Movie, TrendingMovie } from "./commonTypes";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -17,15 +18,15 @@ const API_OPTIONS = {
 };
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [moviesList, setMoviesList] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [moviesList, setMoviesList] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
 
-  const [trendingMovies, setTrendingMovies] = useState([]);
-  const [isLoadingTrending, setIsLoadingTrending] = useState(false);
-  const [errorTrending, setErrorTrending] = useState("");
+  const [trendingMovies, setTrendingMovies] = useState<TrendingMovie[]>([]);
+  const [isLoadingTrending, setIsLoadingTrending] = useState<boolean>(false);
+  const [errorTrending, setErrorTrending] = useState<string>("");
 
   useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
 
@@ -47,7 +48,7 @@ function App() {
         return;
       }
 
-      setMoviesList(data.results);
+      setMoviesList(data.results as Movie[]);
       if (query && data.results.length > 0) {
         updateSearchCount(query, data.results[0]);
       }
@@ -63,7 +64,7 @@ function App() {
     try {
       setIsLoadingTrending(true);
       const movies = await getTrendingMovies();
-      setTrendingMovies(movies);
+      setTrendingMovies(movies as unknown as TrendingMovie[]);
     } catch (error) {
       console.error("Error fetching trending movies:", error);
       setErrorTrending(
