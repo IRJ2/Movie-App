@@ -1,13 +1,14 @@
+import type { Movie } from '../commonTypes';
+
 const MovieCard = ({
   movie: {
     title,
-    id,
     release_date,
     vote_average,
     poster_path,
     original_language,
   },
-}) => {
+}: { movie: Movie }) => {
   return (
     <div className="movie-card">
       <img
