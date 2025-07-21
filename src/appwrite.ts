@@ -1,5 +1,5 @@
 import { Client, Databases, ID, Query } from "appwrite";
-import { data } from "react-router-dom";
+import type { Movie } from "./commonTypes";
 
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -11,7 +11,7 @@ const client = new Client()
 
 const database = new Databases(client);
 
-export const updateSearchCount = async (searchTerm, movie) => {
+export const updateSearchCount = async (searchTerm: string, movie: Movie) => {
   //   1. Use Appwrite sdk to check if the current search term exists in the database
   try {
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
